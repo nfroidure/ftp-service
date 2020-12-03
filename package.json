@@ -1,6 +1,6 @@
 {
   "name": "ftp-service",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A simple wrapper for a simpler FTP client surface API with pool and retry management.",
   "main": "dist/index",
   "module": "dist/index.mjs",
