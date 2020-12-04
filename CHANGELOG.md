@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/nfroidure/ftp-service/compare/v1.0.0...v1.0.1) (2020-12-04)
+
+
+### Bug Fixes
+
+* **di:** fix constants injections ([1de77eb](https://github.com/nfroidure/ftp-service/commit/1de77eb9daabd279d4083d48da6a69a9ff9ee9c2))
+
+
+
 # 1.0.0 (2020-12-03)
 
 
