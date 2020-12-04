@@ -7,10 +7,13 @@ import YError from 'yerror';
 import type { DelayService, LogService } from 'common-services';
 import type { Pool } from 'generic-pool';
 
+export const DEFAULT_FTP_PASSWORD_ENV_NAME = 'FTP_PASSWORD';
+
 export type FTPConfig = {
   FTP?: Parameters<InstanceType<typeof FTPClient>['access']>[0];
   FTP_TIMEOUT?: ConstructorParameters<typeof FTPClient>[0];
   FTP_POOL?: Parameters<typeof createPool>[1];
+  FTP_PASSWORD_ENV_NAME?: string;
   FTP_CONFIG: {
     base: string;
     retry?: {
@@ -50,8 +53,9 @@ export default initializer(
     inject: [
       'FTP',
       'FTP_CONFIG',
-      'FTP_POOL',
-      'FTP_TIMEOUT',
+      '?FTP_POOL',
+      '?FTP_TIMEOUT',
+      '?FTP_PASSWORD_ENV_NAME',
       '?ENV',
       'delay',
       'log',
@@ -71,12 +75,15 @@ export default initializer(
  *  client `access` method
  * @param  {Function}   services.FTP_CONFIG
  * The FTP service configuration object
- * @param  {Function}   services.FTP_POOL
+ * @param  {Function}   [services.FTP_POOL]
  * The FTP pool configuration object as given to
  *  `generic-pool`.
  * @param  {Function}   services.FTP_TIMEOUT
  * The FTP service timeout as given to `basic-ftp`
  *  client constructor
+ * @param  {Function}   [services.FTP_PASSWORD_ENV_NAME]
+ * The environment variable name in which to pick-up the
+ *  FTP password
  * @param  {Function}   [services.log]
  * A logging function
  * @param  {Function}   [services.time]
@@ -108,6 +115,7 @@ async function initFTPService({
   FTP_CONFIG,
   FTP_POOL,
   FTP_TIMEOUT,
+  FTP_PASSWORD_ENV_NAME = DEFAULT_FTP_PASSWORD_ENV_NAME,
   ENV = {},
   delay,
   log,
@@ -125,7 +133,9 @@ async function initFTPService({
 
           await ftpClient.access({
             ...FTP,
-            ...(ENV.FTP_PASSWORD ? { password: ENV.FTP_PASSWORD } : {}),
+            ...(ENV[FTP_PASSWORD_ENV_NAME]
+              ? { password: ENV[FTP_PASSWORD_ENV_NAME] }
+              : {}),
           });
 
           const finalFTPClient: PoolFTPService = {
