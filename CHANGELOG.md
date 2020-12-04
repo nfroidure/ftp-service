@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/nfroidure/ftp-service/compare/v1.0.1...v1.1.0) (2020-12-04)
+
+
+### Features
+
+* **env:** allow to customizable env var name ([f7c8e67](https://github.com/nfroidure/ftp-service/commit/f7c8e67d1784c578ef526a4f0249251b281eb037))
+
+
+
 ## [1.0.1](https://github.com/nfroidure/ftp-service/compare/v1.0.0...v1.0.1) (2020-12-04)
 
 
