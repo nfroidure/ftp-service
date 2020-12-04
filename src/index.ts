@@ -47,7 +47,15 @@ export default initializer(
   {
     name: 'ftp',
     type: 'provider',
-    inject: ['FTP', '?ENV', 'delay', 'log'],
+    inject: [
+      'FTP',
+      'FTP_CONFIG',
+      'FTP_POOL',
+      'FTP_TIMEOUT',
+      '?ENV',
+      'delay',
+      'log',
+    ],
   },
   initFTPService,
 );
@@ -59,7 +67,16 @@ export default initializer(
  * @param  {Object}     services
  * The services to inject
  * @param  {Function}   services.FTP
+ * The configuration object as given to `basic-ftp`
+ *  client `access` method
+ * @param  {Function}   services.FTP_CONFIG
  * The FTP service configuration object
+ * @param  {Function}   services.FTP_POOL
+ * The FTP pool configuration object as given to
+ *  `generic-pool`.
+ * @param  {Function}   services.FTP_TIMEOUT
+ * The FTP service timeout as given to `basic-ftp`
+ *  client constructor
  * @param  {Function}   [services.log]
  * A logging function
  * @param  {Function}   [services.time]

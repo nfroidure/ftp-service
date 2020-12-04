@@ -34,7 +34,10 @@ Instantiate the FTP service
 | Param | Type | Description |
 | --- | --- | --- |
 | services | <code>Object</code> | The services to inject |
-| services.FTP | <code>function</code> | The FTP service configuration object |
+| services.FTP | <code>function</code> | The configuration object as given to `basic-ftp`  client `access` method |
+| services.FTP_CONFIG | <code>function</code> | The FTP service configuration object |
+| services.FTP_POOL | <code>function</code> | The FTP pool configuration object as given to  `generic-pool`. |
+| services.FTP_TIMEOUT | <code>function</code> | The FTP service timeout as given to `basic-ftp`  client constructor |
 | [services.log] | <code>function</code> | A logging function |
 | [services.time] | <code>function</code> | A function returning the current timestamp |
 
