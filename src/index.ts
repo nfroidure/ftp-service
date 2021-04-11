@@ -70,6 +70,8 @@ export default initializer(
  * @function
  * @param  {Object}     services
  * The services to inject
+ * @param  {Object}   [services.ENV]
+ * An environment object
  * @param  {Function}   services.FTP
  * The configuration object as given to `basic-ftp`
  *  client `access` method
@@ -78,7 +80,7 @@ export default initializer(
  * @param  {Function}   [services.FTP_POOL]
  * The FTP pool configuration object as given to
  *  `generic-pool`.
- * @param  {Function}   services.FTP_TIMEOUT
+ * @param  {Function}   [services.FTP_TIMEOUT]
  * The FTP service timeout as given to `basic-ftp`
  *  client constructor
  * @param  {Function}   [services.FTP_PASSWORD_ENV_NAME]
@@ -86,8 +88,8 @@ export default initializer(
  *  FTP password
  * @param  {Function}   [services.log]
  * A logging function
- * @param  {Function}   [services.time]
- * A function returning the current timestamp
+ * @param  {Function}   [services.delay]
+ * A service to manage delays
  * @return {Promise<FTPService>}
  * A promise of the FTP service
  * @example

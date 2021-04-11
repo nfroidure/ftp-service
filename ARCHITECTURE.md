@@ -22,7 +22,7 @@ The `ftp` service creates easily usable FTP features
 The service uses a pool to allow several parallel connections
  to a FTP server.
 
-[See in context](./src/index.ts#L123-L127)
+[See in context](./src/index.ts#L125-L129)
 
 
 
@@ -31,5 +31,5 @@ The service uses a pool to allow several parallel connections
 One can configure the FTP service to retry several times
  before abandonnating the requested operation.
 
-[See in context](./src/index.ts#L322-L326)
+[See in context](./src/index.ts#L324-L328)
 
