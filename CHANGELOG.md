@@ -1,3 +1,7 @@
+## [1.1.1](https://github.com/nfroidure/ftp-service/compare/v1.1.0...v1.1.1) (2021-04-11)
+
+
+
 # [1.1.0](https://github.com/nfroidure/ftp-service/compare/v1.0.1...v1.1.0) (2020-12-04)
 
 
