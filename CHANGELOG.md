@@ -1,3 +1,12 @@
+# [2.0.0](https://github.com/nfroidure/ftp-service/compare/v1.1.1...v2.0.0) (2021-11-02)
+
+
+### Features
+
+* **types:** switch to strict types ([d99977e](https://github.com/nfroidure/ftp-service/commit/d99977eb0dae9abf6eb6c4d400f44dec27323d48))
+
+
+
 ## [1.1.1](https://github.com/nfroidure/ftp-service/compare/v1.1.0...v1.1.1) (2021-04-11)
 
 
