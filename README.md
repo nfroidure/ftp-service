@@ -9,11 +9,6 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/ftp-service/blob/master/LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/nfroidure/ftp-service/badge.svg?branch=master)](https://coveralls.io/github/nfroidure/ftp-service?branch=master)
-[![NPM version](https://badge.fury.io/js/ftp-service.svg)](https://npmjs.org/package/ftp-service)
-[![Dependency Status](https://david-dm.org/nfroidure/ftp-service.svg)](https://david-dm.org/nfroidure/ftp-service)
-[![devDependency Status](https://david-dm.org/nfroidure/ftp-service/dev-status.svg)](https://david-dm.org/nfroidure/ftp-service#info=devDependencies)
-[![Package Quality](https://npm.packagequality.com/shield/ftp-service.svg)](https://packagequality.com/#?package=ftp-service)
-[![Code Climate](https://codeclimate.com/github/nfroidure/ftp-service.svg)](https://codeclimate.com/github/nfroidure/ftp-service)
 
 
 [//]: # (::contents:start)
@@ -40,7 +35,7 @@ Instantiate the FTP service
 | [services.FTP_POOL] | <code>function</code> | The FTP pool configuration object as given to  `generic-pool`. |
 | [services.FTP_TIMEOUT] | <code>function</code> | The FTP service timeout as given to `basic-ftp`  client constructor |
 | [services.FTP_PASSWORD_ENV_NAME] | <code>function</code> | The environment variable name in which to pick-up the  FTP password |
-| [services.log] | <code>function</code> | A logging function |
+| services.log | <code>function</code> | A logging function |
 | [services.delay] | <code>function</code> | A service to manage delays |
 
 **Example**  

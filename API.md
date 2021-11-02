@@ -16,7 +16,7 @@ Instantiate the FTP service
 | [services.FTP_POOL] | <code>function</code> | The FTP pool configuration object as given to  `generic-pool`. |
 | [services.FTP_TIMEOUT] | <code>function</code> | The FTP service timeout as given to `basic-ftp`  client constructor |
 | [services.FTP_PASSWORD_ENV_NAME] | <code>function</code> | The environment variable name in which to pick-up the  FTP password |
-| [services.log] | <code>function</code> | A logging function |
+| services.log | <code>function</code> | A logging function |
 | [services.delay] | <code>function</code> | A service to manage delays |
 
 **Example**  

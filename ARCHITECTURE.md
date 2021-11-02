@@ -5,31 +5,36 @@
 [//]: # ( )
 # Architecture Notes
 
+## Summary
+
+1. [FTP Service](#1-ftp-service)
+   1. [Pool](#11-pool)
+   2. [Retry and error casting](#12-retry-and-error-casting)
 
 
-## FTP Service
+## 1. FTP Service
 
 The `ftp` service creates easily usable FTP features
  by exposing `list`, `put`, `get` and `delete`
  methods and handling any unecessary complexity.
 
-[See in context](./src/index.ts#L42-L47)
+[See in context](./src/index.ts#L62-L67)
 
 
 
-### Pool
+### 1.1. Pool
 
 The service uses a pool to allow several parallel connections
  to a FTP server.
 
-[See in context](./src/index.ts#L125-L129)
+[See in context](./src/index.ts#L146-L150)
 
 
 
-### Retry and error casting
+### 1.2. Retry and error casting
 
 One can configure the FTP service to retry several times
  before abandonnating the requested operation.
 
-[See in context](./src/index.ts#L324-L328)
+[See in context](./src/index.ts#L354-L358)
 

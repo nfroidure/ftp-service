@@ -5,7 +5,6 @@ import path from 'path';
 import type { FTPConfig } from '.';
 
 describe('FTP service', () => {
-  const ENV = {};
   const CONFIG: FTPConfig = {
     FTP: {
       host: 'localhost',
@@ -15,7 +14,7 @@ describe('FTP service', () => {
     FTP_TIMEOUT: 30000,
     FTP_POOL: {
       min: 0,
-      max: 2,
+      max: 1,
       maxWaitingClients: 10,
       evictionRunIntervalMillis: 20,
     },
@@ -33,7 +32,8 @@ describe('FTP service', () => {
     const delay = (await initDelayService({})).service;
     const ftp = await initFTPService({
       ...CONFIG,
-      ENV,
+      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
+      ENV: { FTP_PASSWORD: 'password' },
       delay,
       log,
     });
@@ -46,20 +46,23 @@ describe('FTP service', () => {
         "logCalls": Array [],
       }
     `);
+
+    ftp.dispose && (await ftp.dispose());
   });
 
   test('should list files', async () => {
     const delay = (await initDelayService({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
-      ENV,
+      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD2',
+      ENV: { FTP_PASSWORD2: 'password' },
       delay,
       log,
     });
 
     const files = await ftp.list('/');
 
-    await dispose();
+    dispose && (await dispose());
 
     expect({
       files,
@@ -84,6 +87,10 @@ describe('FTP service', () => {
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
+          Array [
+            "debug",
+            "💾 - Disconnecting a FTP service instance.",
+          ],
         ],
       }
     `);
@@ -93,14 +100,15 @@ describe('FTP service', () => {
     const delay = (await initDelayService({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
-      ENV,
+      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
+      ENV: { FTP_PASSWORD: 'password' },
       delay,
       log,
     });
 
     const fileContent = (await ftp.get('/testfile.txt')).toString();
 
-    await dispose();
+    dispose && (await dispose());
 
     expect({
       fileContent,
@@ -123,6 +131,10 @@ describe('FTP service', () => {
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
+          Array [
+            "debug",
+            "💾 - Disconnecting a FTP service instance.",
+          ],
         ],
       }
     `);
@@ -132,7 +144,8 @@ describe('FTP service', () => {
     const delay = (await initDelayService({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
-      ENV,
+      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
+      ENV: { FTP_PASSWORD: '' },
       delay,
       log,
     });
@@ -155,7 +168,7 @@ describe('FTP service', () => {
       });
     });
 
-    await dispose();
+    dispose && (await dispose());
 
     expect({
       exists,
@@ -189,6 +202,10 @@ describe('FTP service', () => {
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
+          Array [
+            "debug",
+            "💾 - Disconnecting a FTP service instance.",
+          ],
         ],
       }
     `);
@@ -198,7 +215,8 @@ describe('FTP service', () => {
     const delay = (await initDelayService({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
-      ENV,
+      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
+      ENV: { FTP_PASSWORD: 'password' },
       delay,
       log,
     });
@@ -223,7 +241,7 @@ describe('FTP service', () => {
       path.join(__dirname, '..', 'fixtures', 'testfile3.txt'),
     );
 
-    await dispose();
+    dispose && (await dispose());
 
     expect({
       exists,
@@ -246,6 +264,10 @@ describe('FTP service', () => {
           Array [
             "debug",
             "💾 - Shutting down the FTP pool.",
+          ],
+          Array [
+            "debug",
+            "💾 - Disconnecting a FTP service instance.",
           ],
         ],
       }

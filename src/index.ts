@@ -1,19 +1,32 @@
 import path from 'path';
-import { initializer, Provider } from 'knifecycle';
+import { provider } from 'knifecycle';
 import { createPool } from 'generic-pool';
 import { Client as FTPClient } from 'basic-ftp';
 import { PassThrough } from 'stream';
 import YError from 'yerror';
 import type { DelayService, LogService } from 'common-services';
 import type { Pool } from 'generic-pool';
+import type {
+  ProviderInitializer,
+  Dependencies,
+  Service,
+  Provider,
+} from 'knifecycle';
 
 export const DEFAULT_FTP_PASSWORD_ENV_NAME = 'FTP_PASSWORD';
 
-export type FTPConfig = {
-  FTP?: Parameters<InstanceType<typeof FTPClient>['access']>[0];
-  FTP_TIMEOUT?: ConstructorParameters<typeof FTPClient>[0];
-  FTP_POOL?: Parameters<typeof createPool>[1];
-  FTP_PASSWORD_ENV_NAME?: string;
+export type FTP_ENV<
+  T extends string extends T
+    ? never
+    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+> = Record<T, string>;
+
+export type FTPConfig<
+  T extends string extends T
+    ? never
+    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+> = {
+  FTP: NonNullable<Parameters<InstanceType<typeof FTPClient>['access']>[0]>;
   FTP_CONFIG: {
     base: string;
     retry?: {
@@ -21,11 +34,18 @@ export type FTPConfig = {
       attempts: number;
     };
   };
+  FTP_POOL?: Parameters<typeof createPool>[1];
+  FTP_TIMEOUT?: ConstructorParameters<typeof FTPClient>[0];
+  FTP_PASSWORD_ENV_NAME?: T;
 };
-export type FTPDependencies = FTPConfig & {
-  ENV: Record<string, string>;
+export type FTPDependencies<
+  T extends string extends T
+    ? never
+    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+> = FTPConfig<T> & {
+  ENV: FTP_ENV<T>;
   delay: DelayService;
-  log?: LogService;
+  log: LogService;
 };
 export type FTPService = {
   list: (path: string) => Promise<string[]>;
@@ -46,23 +66,20 @@ The `ftp` service creates easily usable FTP features
  methods and handling any unecessary complexity.
 */
 
-export default initializer(
-  {
-    name: 'ftp',
-    type: 'provider',
-    inject: [
-      'FTP',
-      'FTP_CONFIG',
-      '?FTP_POOL',
-      '?FTP_TIMEOUT',
-      '?FTP_PASSWORD_ENV_NAME',
-      '?ENV',
-      'delay',
-      'log',
-    ],
-  },
-  initFTPService,
-);
+export default provider(
+  initFTPService as ProviderInitializer<Dependencies, Service>,
+  'ftp',
+  [
+    'FTP',
+    'FTP_CONFIG',
+    '?FTP_POOL',
+    '?FTP_TIMEOUT',
+    '?FTP_PASSWORD_ENV_NAME',
+    '?ENV',
+    'delay',
+    'log',
+  ],
+) as typeof initFTPService;
 
 /**
  * Instantiate the FTP service
@@ -86,7 +103,7 @@ export default initializer(
  * @param  {Function}   [services.FTP_PASSWORD_ENV_NAME]
  * The environment variable name in which to pick-up the
  *  FTP password
- * @param  {Function}   [services.log]
+ * @param  {Function}   services.log
  * A logging function
  * @param  {Function}   [services.delay]
  * A service to manage delays
@@ -112,16 +129,20 @@ export default initializer(
  *
  * const files = await ftp.list('/);
  */
-async function initFTPService({
+async function initFTPService<
+  T extends string extends T
+    ? never
+    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+>({
   FTP,
   FTP_CONFIG,
   FTP_POOL,
   FTP_TIMEOUT,
-  FTP_PASSWORD_ENV_NAME = DEFAULT_FTP_PASSWORD_ENV_NAME,
-  ENV = {},
+  FTP_PASSWORD_ENV_NAME = DEFAULT_FTP_PASSWORD_ENV_NAME as T,
+  ENV,
   delay,
   log,
-}: FTPDependencies): Promise<Provider<FTPService>> {
+}: FTPDependencies<T>): Promise<Provider<FTPService>> {
   /* Architecture Note #1.1: Pool
   
   The service uses a pool to allow several parallel connections
@@ -152,17 +173,26 @@ async function initFTPService({
 
           return finalFTPClient;
         } catch (err) {
-          log('error', '💾 - FTP connection failure:', err.stack);
-          throw YError.wrap(err, 'E_FTP_CONNECT');
+          log(
+            'error',
+            '💾 - FTP connection failure:',
+            (err as Error).stack as string,
+          );
+          throw YError.wrap(err as Error, 'E_FTP_CONNECT');
         }
       },
       validate: async (finalFTPClient) => !finalFTPClient.isClosed(),
       destroy: async (finalFTPClient) => {
         try {
-          log('debug', await finalFTPClient.destroy());
+          log('debug', '💾 - Disconnecting a FTP service instance.');
+          await finalFTPClient.destroy();
         } catch (err) {
-          const wrappedErr = YError.wrap(err, 'E_FTP_DISCONNECT');
-          log('error', '💾 - FTP disconnection failure:', wrappedErr.stack);
+          const wrappedErr = YError.wrap(err as Error, 'E_FTP_DISCONNECT');
+          log(
+            'error',
+            '💾 - FTP disconnection failure:',
+            wrappedErr.stack as string,
+          );
           throw wrappedErr;
         }
       },
@@ -192,7 +222,7 @@ async function initFTPService({
         );
       } catch (err) {
         throw YError.wrap(
-          err,
+          err as Error,
           'E_FTP_GET',
           FTP.host,
           FTP_CONFIG.base + filePath,
@@ -209,12 +239,12 @@ async function initFTPService({
 
             const [data] = await Promise.all([
               new Promise<Buffer>((resolve, reject) => {
-                const chunks = [];
+                const chunks: Buffer[] = [];
 
                 stream.once('end', () => resolve(Buffer.concat(chunks)));
                 stream.once('error', reject);
                 stream.on('readable', () => {
-                  let data;
+                  let data: Buffer;
                   while ((data = stream.read())) {
                     chunks.push(data);
                   }
@@ -234,7 +264,7 @@ async function initFTPService({
         );
       } catch (err) {
         throw YError.wrap(
-          err,
+          err as Error,
           'E_FTP_GET',
           FTP.host,
           FTP_CONFIG.base + filePath,
@@ -275,7 +305,7 @@ async function initFTPService({
         );
       } catch (err) {
         throw YError.wrap(
-          err,
+          err as Error,
           'E_FTP_PUT',
           FTP.host,
           FTP_CONFIG.base + filePath,
@@ -302,7 +332,7 @@ async function initFTPService({
         );
       } catch (err) {
         throw YError.wrap(
-          err,
+          err as Error,
           'E_FTP_GET',
           FTP.host,
           FTP_CONFIG.base + filePath,
@@ -328,7 +358,7 @@ One can configure the FTP service to retry several times
 */
 async function doFTPWork<
   R,
-  T extends (ftpClient: PoolFTPService) => Promise<R>
+  T extends (ftpClient: PoolFTPService) => Promise<R>,
 >(
   {
     FTP,
@@ -345,36 +375,33 @@ async function doFTPWork<
   fn: T,
   attempts = 0,
 ): Promise<R> {
-  let finalErr: Error;
-  let ftpClient: PoolFTPService;
+  let finalErr: Error | undefined = undefined;
+  let ftpClient: PoolFTPService | undefined = undefined;
 
   try {
     try {
       ftpClient = await pool.acquire();
     } catch (err) {
-      throw YError.wrap(err, 'E_FTP_CONNECT', FTP.host);
+      throw YError.wrap(err as Error, 'E_FTP_CONNECT', FTP.host);
     }
     return await fn(ftpClient);
   } catch (err) {
-    finalErr = err;
+    finalErr = err as Error;
   } finally {
     try {
       if (finalErr) {
-        await pool.destroy(ftpClient);
+        await pool.destroy(ftpClient as PoolFTPService);
       } else {
-        await pool.release(ftpClient);
+        await pool.release(ftpClient as PoolFTPService);
       }
     } catch (releaseErr) {
       const wrappedReleaseErr = YError.wrap(
-        releaseErr,
+        releaseErr as Error,
         'E_FTP_RELEASE',
         FTP.host,
       );
-      log(
-        'error',
-        '💾 - Could not realease the FTP client.',
-        wrappedReleaseErr.stack,
-      );
+      log('error', '💾 - Could not release the FTP client.');
+      log('error-stack', wrappedReleaseErr.stack as string);
       finalErr = finalErr || wrappedReleaseErr;
     }
   }
@@ -385,11 +412,13 @@ async function doFTPWork<
         `💾 - Retrying an FTP work (attempt ${attempts + 1}/${
           FTP_CONFIG.retry.attempts
         })`,
-        finalErr.stack,
       );
+      log('debug-stack', finalErr.stack as string);
       await delay.create(FTP_CONFIG.retry.delay || 0);
       return doFTPWork({ FTP, FTP_CONFIG, delay, log }, pool, fn, attempts + 1);
     }
     throw YError.wrap(finalErr, 'E_FTP_PUT', FTP.host);
   }
+  // Not supposed to reach that code
+  throw new YError('E_FTP_ERROR');
 }
