@@ -46,7 +46,7 @@ import { initDelayService } from 'common-services';
 const delay = await initDelayService({
   log: console.log.bind(console),
 })
-const jwt = await initFTPService({
+const ftp = await initFTPService({
   FTP: {
     host: 'localhost',
     user: 'user',
