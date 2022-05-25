@@ -1,20 +1,35 @@
-version: "3.5"
+version: '3.5'
+networks:
+  fpttest:
+    name: 'fpttest'
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.9.0.0/16
+          ip_range: 10.9.0.0/24
+          gateway: 10.9.0.1
+          aux_addresses:
+            sftp: 10.9.0.2
 services:
   sftp:
     image: stilliard/pure-ftpd
+    container_name: "fpttest-sfpt"
+    networks:
+      - 'fpttest'
     volumes:
       - ./fixtures/:/home/vsftpd/user
     environment:
-      - "FTP_USER_NAME=user"
-      - "FTP_USER_PASS=password"
-      - "FTP_USER_HOME=/home/vsftpd/user"
-      - "PASV_ADDRESS=0.0.0.0"
-      - "PUBLICHOST=0.0.0.0"
-      - "FTP_PASSIVE_PORTS=21100:21110"
-      - "PASV_MAX_PORT=21110"
+      - 'FTP_USER_NAME=user'
+      - 'FTP_USER_PASS=password'
+      - 'FTP_USER_HOME=/home/vsftpd/user'
+      - 'PASV_ADDRESS=0.0.0.0'
+      - 'PUBLICHOST=0.0.0.0'
+      - 'FTP_PASSIVE_PORTS=21100:21110'
+      - 'PASV_MAX_PORT=21110'
     ports:
-      - "20-21:20-21"
-      - "21100-21110:21100-21110"
+      - '20-21:20-21'
+      - '21100-21110:21100-21110'
     expose:
       - 20
       - 21
