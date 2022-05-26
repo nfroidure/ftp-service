@@ -46,18 +46,19 @@ import { initDelayService } from 'common-services';
 const delay = await initDelayService({
   log: console.log.bind(console),
 })
-const ftp = await initFTPService({
+const fpt = await initFTPService({
   FTP: {
     host: 'localhost',
     user: 'user',
     pasword: 'pwd',
   },
   FTP_CONFIG: { base: '' },
+  ENV: process.env,
   delay,
   log: console.log.bind(console),
 });
 
-const files = await ftp.list('/);
+const files = await ftp.list('/');
 ```
 
 # Authors
