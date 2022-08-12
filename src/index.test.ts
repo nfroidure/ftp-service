@@ -1,8 +1,9 @@
-import initFTPService from '.';
+import { jest } from '@jest/globals';
+import initFTPService from './index.js';
 import { initDelayService } from 'common-services';
 import { unlink, existsSync, writeFile } from 'fs';
 import path from 'path';
-import type { FTPConfig } from '.';
+import type { FTPConfig } from './index.js';
 
 describe('FTP service', () => {
   const CONFIG: FTPConfig = {
@@ -154,12 +155,10 @@ describe('FTP service', () => {
 
     const files = await ftp.list('/');
 
-    const exists = existsSync(
-      path.join(__dirname, '..', 'fixtures', 'testfile2.txt'),
-    );
+    const exists = existsSync(path.join('.', 'fixtures', 'testfile2.txt'));
 
     await new Promise<void>((resolve, reject) => {
-      unlink(path.join(__dirname, '..', 'fixtures', 'testfile2.txt'), (err) => {
+      unlink(path.join('.', 'fixtures', 'testfile2.txt'), (err) => {
         if (err) {
           reject(err);
           return;
@@ -223,7 +222,7 @@ describe('FTP service', () => {
 
     await new Promise<void>((resolve, reject) => {
       writeFile(
-        path.join(__dirname, '..', 'fixtures', 'testfile3.txt'),
+        path.join('.', 'fixtures', 'testfile3.txt'),
         'hello!',
         (err) => {
           if (err) {
@@ -237,9 +236,7 @@ describe('FTP service', () => {
 
     const files = await ftp.delete('/testfile3.txt');
 
-    const exists = existsSync(
-      path.join(__dirname, '..', 'fixtures', 'testfile3.txt'),
-    );
+    const exists = existsSync(path.join('.', 'fixtures', 'testfile3.txt'));
 
     dispose && (await dispose());
 

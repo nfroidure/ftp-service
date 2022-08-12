@@ -3,7 +3,7 @@ import { provider } from 'knifecycle';
 import { createPool } from 'generic-pool';
 import { Client as FTPClient } from 'basic-ftp';
 import { PassThrough } from 'stream';
-import YError from 'yerror';
+import { YError } from 'yerror';
 import type { DelayService, LogService } from 'common-services';
 import type { Pool } from 'generic-pool';
 import type {
