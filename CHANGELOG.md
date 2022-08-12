@@ -1,3 +1,12 @@
+# [3.0.0](https://github.com/nfroidure/ftp-service/compare/v2.0.0...v3.0.0) (2022-08-12)
+
+
+### Bug Fixes
+
+* **docs:** fix docs typos ([adf7ba8](https://github.com/nfroidure/ftp-service/commit/adf7ba808df80175506a807f46fa2556b670bf57))
+
+
+
 ## [2.0.1](https://github.com/nfroidure/ftp-service/compare/v2.0.0...v2.0.1) (2022-05-25)
 
 
