@@ -1,3 +1,12 @@
+# [4.0.0](https://github.com/nfroidure/ftp-service/compare/v3.0.0...v4.0.0) (2022-09-01)
+
+
+### Features
+
+* **ci:** use github actions ([f1f6f01](https://github.com/nfroidure/ftp-service/commit/f1f6f011429d0eca33db0e355f2a681973f1ba48))
+
+
+
 # [3.0.0](https://github.com/nfroidure/ftp-service/compare/v2.0.0...v3.0.0) (2022-08-12)
 
 
