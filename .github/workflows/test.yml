@@ -14,6 +14,24 @@ jobs:
       matrix:
         node-version: [16.x, 18.x]
 
+    services:
+      ftp:
+        image: stilliard/pure-ftpd
+        env:
+          FTP_USER_NAME: "user"
+          FTP_USER_PASS: "password"
+          FTP_USER_HOME: "/home/vsftpd/user"
+          PASV_ADDRESS: "0.0.0.0"
+          PUBLICHOST: "0.0.0.0"
+          FTP_PASSIVE_PORTS: "21100:21110"
+          PASV_MAX_PORT: "21110"
+        volumes:
+          - ${{ github.workspace }}/fixtures:/home/vsftpd/user
+        ports:
+          - "20000:20"
+          - "21000:21"
+          - "21100-21110:21100-21110"
+
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -25,3 +43,6 @@ jobs:
         run: npm ci
       - name: Run pre-commit tests
         run: npm run precz
+        env:
+          FTP_HOST: "localhost"
+          FTP_PORT: "21000"

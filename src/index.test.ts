@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { describe, test, beforeEach, jest, expect } from '@jest/globals';
 import initFTPService from './index.js';
 import { initDelayService } from 'common-services';
 import { unlink, existsSync, writeFile } from 'fs';
@@ -8,7 +8,8 @@ import type { FTPConfig } from './index.js';
 describe('FTP service', () => {
   const CONFIG: FTPConfig = {
     FTP: {
-      host: 'localhost',
+      host: process.env.FTP_HOST || 'localhost',
+      port: process.env.FTP_PORT ? parseInt(process.env.FTP_PORT, 10) : 21,
       user: 'user',
       password: 'password',
     },
@@ -43,8 +44,8 @@ describe('FTP service', () => {
     expect({
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      Object {
-        "logCalls": Array [],
+      {
+        "logCalls": [],
       }
     `);
 
@@ -69,26 +70,26 @@ describe('FTP service', () => {
       files,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      Object {
-        "files": Array [
+      {
+        "files": [
           "testfile.txt",
         ],
-        "logCalls": Array [
-          Array [
+        "logCalls": [
+          [
             "debug",
             "💾 - FTP Successfully connected!",
           ],
-          Array [
+          [
             "debug",
             "💾 - Listing files from FTP:",
             "/",
             1,
           ],
-          Array [
+          [
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
-          Array [
+          [
             "debug",
             "💾 - Disconnecting a FTP service instance.",
           ],
@@ -115,24 +116,24 @@ describe('FTP service', () => {
       fileContent,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      Object {
+      {
         "fileContent": "This is a simple text file!",
-        "logCalls": Array [
-          Array [
+        "logCalls": [
+          [
             "debug",
             "💾 - FTP Successfully connected!",
           ],
-          Array [
+          [
             "debug",
             "💾 - Retrieved a file from FTP:",
             "/testfile.txt",
             27,
           ],
-          Array [
+          [
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
-          Array [
+          [
             "debug",
             "💾 - Disconnecting a FTP service instance.",
           ],
@@ -174,34 +175,34 @@ describe('FTP service', () => {
       files,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      Object {
+      {
         "exists": true,
-        "files": Array [
+        "files": [
           "testfile.txt",
           "testfile2.txt",
         ],
-        "logCalls": Array [
-          Array [
+        "logCalls": [
+          [
             "debug",
             "💾 - FTP Successfully connected!",
           ],
-          Array [
+          [
             "debug",
             "💾 - Sent a file to FTP:",
             "/testfile2.txt",
             4,
           ],
-          Array [
+          [
             "debug",
             "💾 - Listing files from FTP:",
             "/",
             2,
           ],
-          Array [
+          [
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
-          Array [
+          [
             "debug",
             "💾 - Disconnecting a FTP service instance.",
           ],
@@ -245,24 +246,24 @@ describe('FTP service', () => {
       files,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      Object {
+      {
         "exists": false,
         "files": undefined,
-        "logCalls": Array [
-          Array [
+        "logCalls": [
+          [
             "debug",
             "💾 - FTP Successfully connected!",
           ],
-          Array [
+          [
             "debug",
             "💾 - Deleted a file from FTP:",
             "/testfile3.txt",
           ],
-          Array [
+          [
             "debug",
             "💾 - Shutting down the FTP pool.",
           ],
-          Array [
+          [
             "debug",
             "💾 - Disconnecting a FTP service instance.",
           ],
