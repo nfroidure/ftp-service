@@ -7,8 +7,8 @@
 # ftp-service
 > A simple wrapper for a simpler FTP client surface API with pool and retry management.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/ftp-service/blob/master/LICENSE)
-[![Coverage Status](https://coveralls.io/repos/github/nfroidure/ftp-service/badge.svg?branch=master)](https://coveralls.io/github/nfroidure/ftp-service?branch=master)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/ftp-service/blob/main/LICENSE)
+[![Coverage Status](https://coveralls.io/repos/github/nfroidure/ftp-service/badge.svg?branch=main)](https://coveralls.io/github/nfroidure/ftp-service?branch=main)
 
 
 [//]: # (::contents:start)
@@ -65,4 +65,4 @@ const files = await ftp.list('/');
 - [Nicolas Froidure](https://insertafter.com/en/index.html)
 
 # License
-[MIT](https://github.com/nfroidure/ftp-service/blob/master/LICENSE)
+[MIT](https://github.com/nfroidure/ftp-service/blob/main/LICENSE)
