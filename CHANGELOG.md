@@ -1,3 +1,12 @@
+# [5.0.0](https://github.com/nfroidure/ftp-service/compare/v4.0.1...v5.0.0) (2023-08-12)
+
+
+### Bug Fixes
+
+* **build:** fix CI ([95a428d](https://github.com/nfroidure/ftp-service/commit/95a428de06c123b24dedf4b880f77b57095a1454))
+
+
+
 ## [4.0.1](https://github.com/nfroidure/ftp-service/compare/v4.0.0...v4.0.1) (2023-01-05)
 
 

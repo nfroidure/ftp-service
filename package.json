@@ -26,7 +26,7 @@
     ]
   },
   "name": "ftp-service",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "type": "module",
   "description": "A simple wrapper for a simpler FTP client surface API with pool and retry management.",
   "main": "dist/index.js",
