@@ -11,7 +11,6 @@ describe('FTP service', () => {
       host: process.env.FTP_HOST || 'localhost',
       port: process.env.FTP_PORT ? parseInt(process.env.FTP_PORT, 10) : 21,
       user: 'user',
-      password: 'password',
     },
     FTP_TIMEOUT: 30000,
     FTP_POOL: {
@@ -34,7 +33,6 @@ describe('FTP service', () => {
     const delay = (await initDelayService({})).service;
     const ftp = await initFTPService({
       ...CONFIG,
-      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
       ENV: { FTP_PASSWORD: 'password' },
       delay,
       log,
@@ -101,9 +99,13 @@ describe('FTP service', () => {
   test('should retrieve files', async () => {
     const delay = (await initDelayService({})).service;
     const { service: ftp, dispose } = await initFTPService({
-      ...CONFIG,
-      FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
-      ENV: { FTP_PASSWORD: 'password' },
+      ...{
+        ...CONFIG,
+        FTP: {
+          ...CONFIG.FTP,
+          password: 'password',
+        },
+      },
       delay,
       log,
     });
@@ -116,30 +118,34 @@ describe('FTP service', () => {
       fileContent,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      {
-        "fileContent": "This is a simple text file!",
-        "logCalls": [
-          [
-            "debug",
-            "💾 - FTP Successfully connected!",
-          ],
-          [
-            "debug",
-            "💾 - Retrieved a file from FTP:",
-            "/testfile.txt",
-            27,
-          ],
-          [
-            "debug",
-            "💾 - Shutting down the FTP pool.",
-          ],
-          [
-            "debug",
-            "💾 - Disconnecting a FTP service instance.",
-          ],
-        ],
-      }
-    `);
+{
+  "fileContent": "This is a simple text file!",
+  "logCalls": [
+    [
+      "warning",
+      "⚠️ - Setting the password in the FTP config is unsafe.",
+    ],
+    [
+      "debug",
+      "💾 - FTP Successfully connected!",
+    ],
+    [
+      "debug",
+      "💾 - Retrieved a file from FTP:",
+      "/testfile.txt",
+      27,
+    ],
+    [
+      "debug",
+      "💾 - Shutting down the FTP pool.",
+    ],
+    [
+      "debug",
+      "💾 - Disconnecting a FTP service instance.",
+    ],
+  ],
+}
+`);
   });
 
   test('should send files', async () => {
@@ -147,7 +153,7 @@ describe('FTP service', () => {
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
       FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
-      ENV: { FTP_PASSWORD: '' },
+      ENV: { FTP_PASSWORD: 'password' },
       delay,
       log,
     });

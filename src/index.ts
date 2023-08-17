@@ -14,12 +14,13 @@ import type {
 } from 'knifecycle';
 
 export const DEFAULT_FTP_PASSWORD_ENV_NAME = 'FTP_PASSWORD';
+export const DEFAULT_ENV = {};
 
-export type FTP_ENV<
+export type FTPEnvVars<
   T extends string extends T
     ? never
     : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
-> = Record<T, string>;
+> = Partial<Record<T, string>>;
 
 export type FTPConfig<
   T extends string extends T
@@ -43,7 +44,7 @@ export type FTPDependencies<
     ? never
     : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
 > = FTPConfig<T> & {
-  ENV: FTP_ENV<T>;
+  ENV?: FTPEnvVars<T>;
   delay: DelayService;
   log: LogService;
 };
@@ -140,10 +141,23 @@ async function initFTPService<
   FTP_POOL,
   FTP_TIMEOUT,
   FTP_PASSWORD_ENV_NAME = DEFAULT_FTP_PASSWORD_ENV_NAME as T,
-  ENV,
+  ENV = DEFAULT_ENV,
   delay,
   log,
 }: FTPDependencies<T>): Promise<Provider<FTPService>> {
+  const ftpPasswordName = (FTP_PASSWORD_ENV_NAME ||
+    DEFAULT_FTP_PASSWORD_ENV_NAME) as T;
+  const ftpPassword = ENV?.[ftpPasswordName];
+
+  if ('password' in FTP) {
+    log('warning', `⚠️ - Setting the password in the FTP config is unsafe.`);
+  }
+
+  if (!('password' in FTP) && !ftpPassword) {
+    log('error', `❌ - No "${ftpPasswordName}" env var set.`);
+    throw new YError('E_BAD_FTPEnvVars', ftpPasswordName);
+  }
+
   /* Architecture Note #1.1: Pool
   
   The service uses a pool to allow several parallel connections
@@ -157,9 +171,7 @@ async function initFTPService<
 
           await ftpClient.access({
             ...FTP,
-            ...(ENV[FTP_PASSWORD_ENV_NAME]
-              ? { password: ENV[FTP_PASSWORD_ENV_NAME] }
-              : {}),
+            ...(ftpPassword ? { password: ftpPassword } : {}),
           });
 
           const finalFTPClient: PoolFTPService = {
