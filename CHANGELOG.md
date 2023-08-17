@@ -1,3 +1,12 @@
+## [6.0.1](https://github.com/nfroidure/ftp-service/compare/v6.0.0...v6.0.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* **env:** allow env to be undefined ([b404538](https://github.com/nfroidure/ftp-service/commit/b404538ff7bb857cd0c7e5cdd5e2e332fce48df2))
+
+
+
 # [6.0.0](https://github.com/nfroidure/ftp-service/compare/v5.0.0...v6.0.0) (2023-08-16)
 
 
