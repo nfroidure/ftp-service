@@ -17,32 +17,25 @@ export const DEFAULT_FTP_PASSWORD_ENV_NAME = 'FTP_PASSWORD';
 export const DEFAULT_ENV = {};
 
 export type FTPEnvVars<
-  T extends string extends T
-    ? never
-    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+  T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
 > = Partial<Record<T, string>>;
 
-export type FTPConfig<
-  T extends string extends T
-    ? never
-    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
-> = {
-  FTP: NonNullable<Parameters<InstanceType<typeof FTPClient>['access']>[0]>;
-  FTP_CONFIG: {
-    base: string;
-    retry?: {
-      delay: number;
-      attempts: number;
+export type FTPConfig<T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME> =
+  {
+    FTP: NonNullable<Parameters<InstanceType<typeof FTPClient>['access']>[0]>;
+    FTP_CONFIG: {
+      base: string;
+      retry?: {
+        delay: number;
+        attempts: number;
+      };
     };
+    FTP_POOL?: Parameters<typeof createPool>[1];
+    FTP_TIMEOUT?: ConstructorParameters<typeof FTPClient>[0];
+    FTP_PASSWORD_ENV_NAME?: T;
   };
-  FTP_POOL?: Parameters<typeof createPool>[1];
-  FTP_TIMEOUT?: ConstructorParameters<typeof FTPClient>[0];
-  FTP_PASSWORD_ENV_NAME?: T;
-};
 export type FTPDependencies<
-  T extends string extends T
-    ? never
-    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+  T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
 > = FTPConfig<T> & {
   ENV?: FTPEnvVars<T>;
   delay: DelayService;
@@ -132,9 +125,7 @@ export default provider(
  * const files = await ftp.list('/');
  */
 async function initFTPService<
-  T extends string extends T
-    ? never
-    : string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
+  T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
 >({
   FTP,
   FTP_CONFIG,

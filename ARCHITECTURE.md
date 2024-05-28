@@ -18,7 +18,7 @@ The `ftp` service creates easily usable FTP features
  by exposing `list`, `put`, `get` and `delete`
  methods and handling any unecessary complexity.
 
-[See in context](./src/index.ts#L63-L68)
+[See in context](./src/index.ts#L56-L61)
 
 
 
@@ -27,7 +27,7 @@ The `ftp` service creates easily usable FTP features
 The service uses a pool to allow several parallel connections
  to a FTP server.
 
-[See in context](./src/index.ts#L161-L165)
+[See in context](./src/index.ts#L152-L156)
 
 
 
@@ -36,5 +36,5 @@ The service uses a pool to allow several parallel connections
 One can configure the FTP service to retry several times
  before abandonnating the requested operation.
 
-[See in context](./src/index.ts#L367-L371)
+[See in context](./src/index.ts#L358-L362)
 

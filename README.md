@@ -8,7 +8,6 @@
 > A simple wrapper for a simpler FTP client surface API with pool and retry management.
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/ftp-service/blob/main/LICENSE)
-[![Coverage Status](https://coveralls.io/repos/github/nfroidure/ftp-service/badge.svg?branch=main)](https://coveralls.io/github/nfroidure/ftp-service?branch=main)
 
 
 [//]: # (::contents:start)

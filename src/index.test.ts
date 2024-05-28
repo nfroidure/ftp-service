@@ -1,6 +1,6 @@
 import { describe, test, beforeEach, jest, expect } from '@jest/globals';
 import initFTPService from './index.js';
-import { initDelayService } from 'common-services';
+import { initDelay } from 'common-services';
 import { unlink, existsSync, writeFile } from 'fs';
 import path from 'path';
 import type { FTPConfig } from './index.js';
@@ -30,7 +30,7 @@ describe('FTP service', () => {
   });
 
   test('should init well', async () => {
-    const delay = (await initDelayService({})).service;
+    const delay = (await initDelay({})).service;
     const ftp = await initFTPService({
       ...CONFIG,
       ENV: { FTP_PASSWORD: 'password' },
@@ -51,7 +51,7 @@ describe('FTP service', () => {
   });
 
   test('should list files', async () => {
-    const delay = (await initDelayService({})).service;
+    const delay = (await initDelay({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
       FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD2',
@@ -97,7 +97,7 @@ describe('FTP service', () => {
   });
 
   test('should retrieve files', async () => {
-    const delay = (await initDelayService({})).service;
+    const delay = (await initDelay({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...{
         ...CONFIG,
@@ -149,7 +149,7 @@ describe('FTP service', () => {
   });
 
   test('should send files', async () => {
-    const delay = (await initDelayService({})).service;
+    const delay = (await initDelay({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
       FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
@@ -218,7 +218,7 @@ describe('FTP service', () => {
   });
 
   test('should delete files', async () => {
-    const delay = (await initDelayService({})).service;
+    const delay = (await initDelay({})).service;
     const { service: ftp, dispose } = await initFTPService({
       ...CONFIG,
       FTP_PASSWORD_ENV_NAME: 'FTP_PASSWORD',
