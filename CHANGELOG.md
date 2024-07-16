@@ -1,3 +1,7 @@
+## [6.0.5](https://github.com/nfroidure/ftp-service/compare/v6.0.4...v6.0.5) (2024-07-16)
+
+
+
 ## [6.0.4](https://github.com/nfroidure/ftp-service/compare/v6.0.3...v6.0.4) (2024-05-28)
 
 
