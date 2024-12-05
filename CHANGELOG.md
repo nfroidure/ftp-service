@@ -1,3 +1,18 @@
+# [7.0.0](https://github.com/nfroidure/ftp-service/compare/v6.0.5...v7.0.0) (2024-12-05)
+
+
+### chore
+
+* **dependencies:** update dependencies ([daa8eb2](https://github.com/nfroidure/ftp-service/commit/daa8eb282fff2225e08c93f67072ff91020fdb43))
+
+
+### BREAKING CHANGES
+
+* **dependencies:** Using a new Knifecycle major version, may not break but worth defensive
+versionning.
+
+
+
 ## [6.0.5](https://github.com/nfroidure/ftp-service/compare/v6.0.4...v6.0.5) (2024-07-16)
 
 
