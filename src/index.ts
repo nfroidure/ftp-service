@@ -1,5 +1,5 @@
 import path from 'path';
-import { provider } from 'knifecycle';
+import { provider, location } from 'knifecycle';
 import { createPool } from 'generic-pool';
 import { Client as FTPClient } from 'basic-ftp';
 import { PassThrough } from 'stream';
@@ -60,19 +60,22 @@ The `ftp` service creates easily usable FTP features
  methods and handling any unecessary complexity.
 */
 
-export default provider(
-  initFTPService as ProviderInitializer<Dependencies, Service>,
-  'ftp',
-  [
-    'FTP',
-    'FTP_CONFIG',
-    '?FTP_POOL',
-    '?FTP_TIMEOUT',
-    '?FTP_PASSWORD_ENV_NAME',
-    '?ENV',
-    'delay',
-    'log',
-  ],
+export default location(
+  provider(
+    initFTPService as ProviderInitializer<Dependencies, Service>,
+    'ftp',
+    [
+      'FTP',
+      'FTP_CONFIG',
+      '?FTP_POOL',
+      '?FTP_TIMEOUT',
+      '?FTP_PASSWORD_ENV_NAME',
+      '?ENV',
+      'delay',
+      'log',
+    ],
+  ),
+  import.meta.url,
 ) as typeof initFTPService;
 
 /**

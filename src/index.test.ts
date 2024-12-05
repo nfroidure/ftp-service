@@ -47,7 +47,9 @@ describe('FTP service', () => {
       }
     `);
 
-    ftp.dispose && (await ftp.dispose());
+    if (ftp.dispose) {
+      await ftp.dispose();
+    }
   });
 
   test('should list files', async () => {
@@ -62,7 +64,9 @@ describe('FTP service', () => {
 
     const files = await ftp.list('/');
 
-    dispose && (await dispose());
+    if (dispose) {
+      await dispose();
+    }
 
     expect({
       files,
@@ -112,7 +116,9 @@ describe('FTP service', () => {
 
     const fileContent = (await ftp.get('/testfile.txt')).toString();
 
-    dispose && (await dispose());
+    if (dispose) {
+      await dispose();
+    }
 
     expect({
       fileContent,
@@ -174,7 +180,9 @@ describe('FTP service', () => {
       });
     });
 
-    dispose && (await dispose());
+    if (dispose) {
+      await dispose();
+    }
 
     expect({
       exists,
@@ -245,7 +253,9 @@ describe('FTP service', () => {
 
     const exists = existsSync(path.join('.', 'fixtures', 'testfile3.txt'));
 
-    dispose && (await dispose());
+    if (dispose) {
+      await dispose();
+    }
 
     expect({
       exists,
