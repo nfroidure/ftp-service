@@ -3,7 +3,7 @@ import initFTPService from './index.js';
 import { initDelay } from 'common-services';
 import { unlink, existsSync, writeFile } from 'fs';
 import path from 'path';
-import type { FTPConfig } from './index.js';
+import { type FTPConfig } from './index.js';
 
 describe('FTP service', () => {
   const CONFIG: FTPConfig = {

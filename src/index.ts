@@ -20,8 +20,7 @@ export type FTPEnvVars<
   T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME,
 > = Partial<Record<T, string>>;
 
-export type FTPConfig<T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME> =
-  {
+export interface FTPConfig<T extends string = typeof DEFAULT_FTP_PASSWORD_ENV_NAME>   {
     FTP: NonNullable<Parameters<InstanceType<typeof FTPClient>['access']>[0]>;
     FTP_CONFIG: {
       base: string;
@@ -41,13 +40,13 @@ export type FTPDependencies<
   delay: DelayService;
   log: LogService;
 };
-export type FTPService = {
+export interface FTPService {
   list: (path: string) => Promise<string[]>;
   get: (path: string) => Promise<Buffer>;
   put: (path: string, data: string | Buffer) => Promise<void>;
   delete: (path: string) => Promise<void>;
 };
-type PoolFTPService = {
+interface PoolFTPService {
   client: FTPClient;
   isClosed: () => boolean;
   destroy: () => Promise<void>;
@@ -149,7 +148,7 @@ async function initFTPService<
 
   if (!('password' in FTP) && !ftpPassword) {
     log('error', `❌ - No "${ftpPasswordName}" env var set.`);
-    throw new YError('E_BAD_FTPEnvVars', ftpPasswordName);
+    throw new YError('E_BAD_FTPEnvVars', [ftpPasswordName]);
   }
 
   /* Architecture Note #1.1: Pool
@@ -231,8 +230,8 @@ async function initFTPService<
         throw YError.wrap(
           err as Error,
           'E_FTP_GET',
-          FTP.host,
-          FTP_CONFIG.base + filePath,
+          [FTP.host,
+          FTP_CONFIG.base + filePath],
         );
       }
     },
@@ -273,8 +272,8 @@ async function initFTPService<
         throw YError.wrap(
           err as Error,
           'E_FTP_GET',
-          FTP.host,
-          FTP_CONFIG.base + filePath,
+          [FTP.host,
+          FTP_CONFIG.base + filePath],
         );
       }
     },
@@ -314,8 +313,8 @@ async function initFTPService<
         throw YError.wrap(
           err as Error,
           'E_FTP_PUT',
-          FTP.host,
-          FTP_CONFIG.base + filePath,
+          [FTP.host,
+          FTP_CONFIG.base + filePath],
         );
       }
     },
@@ -341,8 +340,8 @@ async function initFTPService<
         throw YError.wrap(
           err as Error,
           'E_FTP_GET',
-          FTP.host,
-          FTP_CONFIG.base + filePath,
+          [FTP.host,
+          FTP_CONFIG.base + filePath],
         );
       }
     },
@@ -389,7 +388,7 @@ async function doFTPWork<
     try {
       ftpClient = await pool.acquire();
     } catch (err) {
-      throw YError.wrap(err as Error, 'E_FTP_CONNECT', FTP.host);
+      throw YError.wrap(err as Error, 'E_FTP_CONNECT', [FTP.host]);
     }
     return await fn(ftpClient);
   } catch (err) {
@@ -405,7 +404,7 @@ async function doFTPWork<
       const wrappedReleaseErr = YError.wrap(
         releaseErr as Error,
         'E_FTP_RELEASE',
-        FTP.host,
+       [ FTP.host],
       );
       log('error', '💾 - Could not release the FTP client.');
       log('error-stack', wrappedReleaseErr.stack as string);
@@ -424,7 +423,7 @@ async function doFTPWork<
       await delay.create(FTP_CONFIG.retry.delay || 0);
       return doFTPWork({ FTP, FTP_CONFIG, delay, log }, pool, fn, attempts + 1);
     }
-    throw YError.wrap(finalErr, 'E_FTP_PUT', FTP.host);
+    throw YError.wrap(finalErr, 'E_FTP_PUT', [FTP.host]);
   }
   // Not supposed to reach that code
   throw new YError('E_FTP_ERROR');
