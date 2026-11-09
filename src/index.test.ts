@@ -124,34 +124,34 @@ describe('FTP service', () => {
       fileContent,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-{
-  "fileContent": "This is a simple text file!",
-  "logCalls": [
-    [
-      "warning",
-      "⚠️ - Setting the password in the FTP config is unsafe.",
-    ],
-    [
-      "debug",
-      "💾 - FTP Successfully connected!",
-    ],
-    [
-      "debug",
-      "💾 - Retrieved a file from FTP:",
-      "/testfile.txt",
-      27,
-    ],
-    [
-      "debug",
-      "💾 - Shutting down the FTP pool.",
-    ],
-    [
-      "debug",
-      "💾 - Disconnecting a FTP service instance.",
-    ],
-  ],
-}
-`);
+     {
+       "fileContent": "This is a simple text file!",
+       "logCalls": [
+         [
+           "warning",
+           "⚠️ - Setting the password in the FTP config is unsafe.",
+         ],
+         [
+           "debug",
+           "💾 - FTP Successfully connected!",
+         ],
+         [
+           "debug",
+           "💾 - Retrieved a file from FTP:",
+           "/testfile.txt",
+           27,
+         ],
+         [
+           "debug",
+           "💾 - Shutting down the FTP pool.",
+         ],
+         [
+           "debug",
+           "💾 - Disconnecting a FTP service instance.",
+         ],
+       ],
+     }
+    `);
   });
 
   test('should send files', async () => {
@@ -189,39 +189,39 @@ describe('FTP service', () => {
       files,
       logCalls: log.mock.calls,
     }).toMatchInlineSnapshot(`
-      {
-        "exists": true,
-        "files": [
-          "testfile.txt",
-          "testfile2.txt",
-        ],
-        "logCalls": [
-          [
-            "debug",
-            "💾 - FTP Successfully connected!",
-          ],
-          [
-            "debug",
-            "💾 - Sent a file to FTP:",
-            "/testfile2.txt",
-            4,
-          ],
-          [
-            "debug",
-            "💾 - Listing files from FTP:",
-            "/",
-            2,
-          ],
-          [
-            "debug",
-            "💾 - Shutting down the FTP pool.",
-          ],
-          [
-            "debug",
-            "💾 - Disconnecting a FTP service instance.",
-          ],
-        ],
-      }
+     {
+       "exists": true,
+       "files": [
+         "testfile2.txt",
+         "testfile.txt",
+       ],
+       "logCalls": [
+         [
+           "debug",
+           "💾 - FTP Successfully connected!",
+         ],
+         [
+           "debug",
+           "💾 - Sent a file to FTP:",
+           "/testfile2.txt",
+           4,
+         ],
+         [
+           "debug",
+           "💾 - Listing files from FTP:",
+           "/",
+           2,
+         ],
+         [
+           "debug",
+           "💾 - Shutting down the FTP pool.",
+         ],
+         [
+           "debug",
+           "💾 - Disconnecting a FTP service instance.",
+         ],
+       ],
+     }
     `);
   });
 
